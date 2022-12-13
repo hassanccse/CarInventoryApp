@@ -1,0 +1,46 @@
+﻿@page "/"
+
+@using CarInventoryApp.Shared.Models
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<PageTitle>Cars List</PageTitle>
+
+<MudSimpleTable Hover="true" Striped="true" Style="overflow-x: auto;">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Model</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var car in AllCars)
+        {
+            <tr @onclick="@(() => GoToCarDetails(car.Id))">
+                <td>@car.Name</td>
+                <td>@car.Model</td>
+            </tr>
+        }
+    </tbody>
+</MudSimpleTable>
+
+@code {
+    private List<Car> AllCars = new List<Car>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            AllCars = await Http.GetFromJsonAsync<List<Car>>("api/car") ?? new List<Car>();
+
+        } catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void GoToCarDetails(int id)
+    {
+        Navigation.NavigateTo("car/" + id);
+    }
+}

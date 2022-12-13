@@ -1,0 +1,40 @@
+﻿@page "/car/{Id:int}"
+
+@using CarInventoryApp.Shared.Models
+@inject HttpClient Http
+
+<PageTitle>Car Details</PageTitle>
+
+<MudCard>
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h6">@SelectedCar.Name</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudText>Model: @SelectedCar.Model</MudText>
+        <MudText Typo="Typo.body2">Price: $@SelectedCar.Price</MudText>
+    </MudCardContent>
+    <MudCardActions>
+        <MudButton Variant="Variant.Text" Color="Color.Primary">Stock: @SelectedCar.Stock</MudButton>
+    </MudCardActions>
+</MudCard>
+
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private Car SelectedCar = new Car();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            SelectedCar = await Http.GetFromJsonAsync<Car>("api/car/" + Id) ?? new Car();
+
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+}
