@@ -19,6 +19,12 @@ steps:
 
 - task: NuGetCommand@2
   inputs:
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    appType: 'webApp'
+    WebAppName: 'HASSANXEDIACCSETEST'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
     restoreSolution: '$(solution)'
 
 - task: VSBuild@1
